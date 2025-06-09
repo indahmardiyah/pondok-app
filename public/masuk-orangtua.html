@@ -8,7 +8,6 @@
 </head>
 <body class="login-page">
   <div class="login-box">
-    <img src="images/pengurus-icon.png" alt="Orangtua Icon" class="login-icon">
     <h2>Masuk Sebagai<br>Orang Tua</h2>
     <form id="loginForm">
       <input type="text" id="username" placeholder="Nama pengguna" required />
@@ -25,7 +24,7 @@
       const username = document.getElementById("username").value;
       const password = document.getElementById("password").value;
 
-      const res = await fetch("/api/auth/login", {
+      const res = await fetch("https://pondok-backend.glitch.me/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password })

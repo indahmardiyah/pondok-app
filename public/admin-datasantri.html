@@ -147,7 +147,7 @@
   <!-- Script ambil data -->
   <script>
     function loadData() {
-      fetch('http://localhost:4000/api/santri')
+      fetch('https://pondok-backend.glitch.me/api/santri')
         .then(res => res.json())
         .then(data => {
           const container = document.getElementById('santri-container');
@@ -170,7 +170,7 @@
 
     function hapusSantri(id) {
       if (confirm("Yakin ingin menghapus data ini?")) {
-        fetch(`http://localhost:4000/api/santri/${id}`, {
+        fetch(`https://pondok-backend.glitch.me/api/santri/${id}`, {
           method: 'DELETE'
         })
         .then(res => {
