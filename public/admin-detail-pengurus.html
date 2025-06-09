@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profil Pengurus</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: Georgia, serif;
+      background-image: url('/images/pondok.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: #000;
+    }
+
+    .header {
+      text-align: center;
+      padding-top: 30px;
+    }
+
+    .header h1 {
+      font-size: 36px;
+      border-bottom: 2px solid #000;
+      display: inline-block;
+      padding-bottom: 5px;
+    }
+
+    .content {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 30px;
+      margin: 30px auto;
+      max-width: 900px;
+      background-color: rgba(255,255,255,0.9);
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    .data-teks {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .data-teks p {
+      font-size: 18px;
+      margin: 10px 0;
+    }
+
+    .foto-pengurus img {
+      width: 180px;
+      height: auto;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+
+    .back-button {
+      display: block;
+      margin: 30px auto;
+      padding: 10px 20px;
+      background-color: #333;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      max-width: 200px;
+    }
+
+    .back-button:hover {
+      background-color: #555;
+    }
+
+    .edit-actions {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .edit-actions button {
+      padding: 8px 16px;
+      font-size: 14px;
+      margin: 5px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    #editBtn {
+      background-color: #28a745;
+      color: white;
+    }
+
+    #editBtn:hover {
+      background-color: #218838;
+    }
+
+    #saveBtn {
+      background-color: #007bff;
+      color: white;
+    }
+
+    #saveBtn:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Daftar Pimpinan dan Pengurus</h1>
+  </div>
+
+  <div class="content" id="pengurus-detail">
+    <p>Memuat data...</p>
+  </div>
+
+  <div class="edit-actions">
+    <button id="editBtn" onclick="enableEdit()">Edit</button>
+    <button id="saveBtn" onclick="saveEdit()" style="display:none;">Simpan</button>
+  </div>
+
+  <a href="admin-pengurus.html" class="back-button">← Kembali</a>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+
+    async function getDetailPengurus() {
+      try {
+        const res = await fetch(`http://localhost:4000/api/pengurus/${id}`);
+        const data = await res.json();
+
+        document.getElementById("pengurus-detail").innerHTML = `
+          <div class="data-teks">
+            <p><strong>Nama:</strong> <span id="nama" contenteditable="false">${data.nama}</span></p>
+            <p><strong>Asal:</strong> <span id="asal" contenteditable="false">${data.asal}</span></p>
+            <p><strong>Nama Ayah:</strong> <span id="namaAyah" contenteditable="false">${data.namaAyah}</span></p>
+            <p><strong>Nama Ibu:</strong> <span id="namaIbu" contenteditable="false">${data.namaIbu}</span></p>
+            <p><strong>Jumlah Saudara:</strong> <span id="jumlahSaudara" contenteditable="false">${data.jumlahSaudara}</span></p>
+            <p><strong>Anak ke:</strong> <span id="anakKe" contenteditable="false">${data.anakKe}</span></p>
+          </div>
+          <div class="foto-pengurus">
+            <img src="/images/${data.foto || 'foto-default.jpg'}" alt="Foto Pengurus">
+          </div>
+        `;
+      } catch (error) {
+        document.getElementById("pengurus-detail").innerHTML = `<p>Gagal memuat data pengurus.</p>`;
+      }
+    }
+
+    function enableEdit() {
+      const fields = ['nama', 'tanggalLahir', 'wafat', 'usia', 'asal', 'namaAyah', 'namaIbu', 'jumlahSaudara', 'anakKe'];
+      fields.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.contentEditable = true;
+      });
+
+      document.getElementById('editBtn').style.display = 'none';
+      document.getElementById('saveBtn').style.display = 'inline-block';
+    }
+
+    async function saveEdit() {
+      const fields = ['nama', 'asal', 'namaAyah', 'namaIbu', 'jumlahSaudara', 'anakKe'];
+      const data = {};
+
+      fields.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) data[id] = el.innerText;
+      });
+
+      try {
+        const res = await fetch(`http://localhost:4000/api/pengurus/${id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+
+        if (res.ok) {
+          alert("Data berhasil disimpan.");
+          location.reload();
+        } else {
+          alert("Gagal menyimpan data.");
+        }
+      } catch (err) {
+        alert("Terjadi kesalahan saat menyimpan.");
+      }
+    }
+
+    getDetailPengurus();
+  </script>
+</body>
+</html>

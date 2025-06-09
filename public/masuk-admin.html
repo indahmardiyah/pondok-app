@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login Admin</title>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body class="login-page">
+  <div class="login-box">
+    <img src="images/pengurus-icon.png" alt="Icon" class="login-icon">
+    <h2>Masuk Sebagai<br>Admin</h2>
+    <form id="loginForm">
+      <input type="text" id="username" placeholder="Nama pengguna" required />
+      <input type="password" id="password" placeholder="Kata sandi" required />
+      <button type="submit">Masuk</button>
+    </form>
+    <p id="errorMsg" style="color: red;"></p>
+  </div>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          if (data.role === 'admin') {
+            localStorage.setItem('token', data.token); // jika pakai token
+            window.location.href = 'admin-beranda.html';
+          } else {
+            document.getElementById('errorMsg').textContent = 'Bukan akun admin.';
+          }
+        } else {
+          document.getElementById('errorMsg').textContent = data.message;
+        }
+      } catch (err) {
+        document.getElementById('errorMsg').textContent = 'Terjadi kesalahan.';
+      }
+    });
+  </script>
+</body>
+</html>

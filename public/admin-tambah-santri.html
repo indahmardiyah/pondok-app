@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tambah Santri</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f3fdf1;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: #ffffffcc;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      font-family: Georgia, serif;
+      border-bottom: 2px solid #2c7c3f;
+      padding-bottom: 10px;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #aaa;
+      border-radius: 5px;
+    }
+
+    .unit-label {
+      display: inline-block;
+      margin-left: 10px;
+      font-size: 0.9em;
+      color: #555;
+    }
+
+    button {
+      margin-top: 20px;
+      background-color: #2c7c3f;
+      color: white;
+      padding: 12px;
+      border: none;
+      width: 100%;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #256835;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Tambah Data Santri</h2>
+    <form id="formSantri" enctype="multipart/form-data">
+      <input type="text" name="nama" placeholder="Nama" required>
+      <input type="number" name="umur" placeholder="Umur">
+      <input type="text" name="asal" placeholder="Asal">
+      <input type="text" name="namaAyah" placeholder="Nama Ayah">
+      <input type="text" name="namaIbu" placeholder="Nama Ibu">
+      <input type="number" name="jumlahHafalan" placeholder="Jumlah Hafalan">
+      <input type="file" name="foto" id="fotoInput">
+      <button type="submit">Simpan</button>
+    </form>
+  </div>
+  <script>
+  document.getElementById('formSantri').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const form = e.target;
+    const formData = new FormData(form);
+
+    try {
+      const response = await fetch('http://localhost:4000/api/santri', {
+        method: 'POST',
+        body: formData
+      });
+
+      const contentType = response.headers.get('content-type');
+
+      if (response.ok) {
+        if (contentType && contentType.includes('application/json')) {
+          const result = await response.json();
+          alert(result.message || 'Data santri berhasil ditambahkan!');
+        } else {
+          const text = await response.text();
+          alert('Data santri berhasil ditambahkan!\n\n' + text);
+        }
+
+        window.location.href = 'admin-datasantri.html';
+      } else {
+        if (contentType && contentType.includes('application/json')) {
+          const result = await response.json();
+          alert('Gagal menambahkan data: ' + (result.message || 'Terjadi kesalahan.'));
+        } else {
+          const text = await response.text();
+          alert('Gagal menambahkan data:\n\n' + text);
+        }
+      }
+
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Terjadi kesalahan saat mengirim data.');
+    }
+  });
+</script>
+</body>
+</html>

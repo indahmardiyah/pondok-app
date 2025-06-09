@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profil Pengurus</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: Georgia, serif;
+      background-image: url('/images/pondok.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: #000;
+    }
+    .header {
+      text-align: center;
+      padding-top: 30px;
+    }
+    .header h1 {
+      font-size: 36px;
+      border-bottom: 2px solid #000;
+      display: inline-block;
+      padding-bottom: 5px;
+    }
+    .content {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 30px;
+      margin: 30px auto;
+      max-width: 900px;
+      background-color: rgba(255,255,255,0.9);
+      padding: 20px;
+      border-radius: 10px;
+    }
+    .data-teks {
+      flex: 1;
+      min-width: 300px;
+    }
+    .data-teks p {
+      font-size: 18px;
+      margin: 10px 0;
+    }
+    .foto-pengurus img {
+      width: 180px;
+      height: auto;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+    .back-button {
+      display: block;
+      margin: 30px auto;
+      padding: 10px 20px;
+      background-color: #333;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      max-width: 200px;
+    }
+    .back-button:hover {
+      background-color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Daftar Pimpinan dan Pengurus</h1>
+  </div>
+
+  <div class="content" id="pengurus-detail">
+    <p>Memuat data...</p>
+  </div>
+
+  <a href="halmasuk-pengurus.html" class="back-button">← Kembali</a>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+
+    async function getDetailPengurus() {
+      try {
+        const res = await fetch(`http://localhost:4000/api/pengurus/${id}`);
+        const data = await res.json();
+
+        document.getElementById("pengurus-detail").innerHTML = `
+          <div class="data-teks">
+            <p><strong>Nama:</strong> ${data.nama}</p>
+            <p><strong>Asal:</strong> ${data.asal}</p>
+            <p><strong>Nama Ayah:</strong> ${data.namaAyah}</p>
+            <p><strong>Nama Ibu:</strong> ${data.namaIbu}</p>
+            <p><strong>Jumlah Saudara:</strong> ${data.jumlahSaudara}</p>
+            <p><strong>Anak ke:</strong> ${data.anakKe}</p>
+          </div>
+          <div class="foto-pengurus">
+            <img src="/images/${data.foto || 'foto-default.jpg'}" alt="Foto Pengurus">
+          </div>
+        `;
+      } catch (error) {
+        document.getElementById("pengurus-detail").innerHTML = `<p>Gagal memuat data pengurus.</p>`;
+      }
+    }
+
+    getDetailPengurus();
+  </script>
+</body>
+</html>
