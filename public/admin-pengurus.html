@@ -156,7 +156,7 @@
 
   function handleDelete(id) {
     if (confirm('Yakin ingin menghapus data ini?')) {
-      fetch(`hhttps://pondok-backend.glitch.me/api/pengurus/${id}`, {
+      fetch(`https://pondok-backend.vercel.app/api/pengurus/${id}`, {
         method: 'DELETE'
       })
       .then(res => res.json())
@@ -165,7 +165,7 @@
     }
   }
 
-  fetch('https://pondok-backend.glitch.me/api/pengurus')
+  fetch('https://pondok-backend.vercel.app/api/pengurus')
     .then(res => res.json())
     .then(data => {
       const container = document.getElementById('pengurus-container');
