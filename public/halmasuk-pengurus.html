@@ -147,7 +147,7 @@
   <div class="grid-container" id="pengurus-container"></div>
 
   <script>
-  fetch('http://localhost:4000/api/pengurus')
+  fetch("http://pondok-backend.vercel.app/api/pengurus")
     .then(res => res.json())
     .then(data => {
       const container = document.getElementById('pengurus-container');

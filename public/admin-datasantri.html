@@ -170,7 +170,7 @@
 
     function hapusSantri(id) {
       if (confirm("Yakin ingin menghapus data ini?")) {
-        fetch(`https://pondok-backend.vercel.app/api/santri/${id}`, {
+        fetch("https://pondok-backend.vercel.app/api/santri?id=ID_SANTRI", {
           method: 'DELETE'
         })
         .then(res => {
