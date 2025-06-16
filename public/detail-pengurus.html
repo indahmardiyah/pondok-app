@@ -87,7 +87,7 @@
 
     async function getDetailPengurus() {
       try {
-        const res = await fetch("https://pondok-backend.vercel.app/api/pengurus?id=ID_PENGURUS");
+        const res = await fetch(`https://pondok-backend.vercel.app/api/pengurus?id=${id}`);
         const data = await res.json();
 
         document.getElementById("pengurus-detail").innerHTML = `

@@ -156,7 +156,7 @@
 
   function handleDelete(id) {
     if (confirm('Yakin ingin menghapus data ini?')) {
-      fetch("https://pondok-backend.vercel.app/api/pengurus?id=ID_PENGURUS", {
+      fetch(`https://pondok-backend.vercel.app/api/pengurus?id=${id}`, {
         method: 'DELETE'
       })
       .then(res => res.json())

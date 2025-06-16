@@ -120,7 +120,7 @@
       if (!id) return;
 
       try {
-        const response = await fetch("https://pondok-backend.vercel.app/api/santri?id=ID_SANTRI");
+        const response = await fetch(`https://pondok-backend.vercel.app/api/santri?id=${id}`);
         const data = await response.json();
 
         const detailContainer = document.getElementById('santri-detail');
